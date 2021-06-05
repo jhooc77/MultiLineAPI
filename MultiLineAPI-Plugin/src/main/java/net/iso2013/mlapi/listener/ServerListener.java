@@ -20,6 +20,8 @@ import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
@@ -49,6 +51,11 @@ public class ServerListener implements Listener {
     }
 
     @EventHandler
+    public void onLogin(PlayerRespawnEvent e) {
+        this.onSpawn(e.getPlayer());
+    }
+
+    @EventHandler
     public void onSpawn(CreatureSpawnEvent e) {
         this.onSpawn(e.getEntity());
     }
@@ -56,6 +63,15 @@ public class ServerListener implements Listener {
     @EventHandler
     public void onSpawn(ItemSpawnEvent e) {
         this.onSpawn(e.getEntity());
+    }
+    
+    @EventHandler
+    public void onToggle(PlayerToggleSneakEvent e) {
+    	if (e.isSneaking()) {
+    		this.onDespawn(e.getPlayer());
+    	} else {
+    		this.onSpawn(e.getPlayer());
+    	}
     }
 
     @EventHandler
